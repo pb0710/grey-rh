@@ -7,6 +7,9 @@ const App: FC = () => {
 	return (
 		<div className="example">
 			<div className="nav-bar">
+				<Link to="/">
+					<div className="nav-item">Index</div>
+				</Link>
 				<Link to="/button">
 					<div className="nav-item">Button</div>
 				</Link>
