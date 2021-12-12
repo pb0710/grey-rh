@@ -1,19 +1,19 @@
 import React, { FC, FormEvent } from 'react'
-import { useForm } from '../../src'
+import { Field, useForm } from '../../src'
 import '../classes/index.scss'
 
 interface CheckboxProps {
-	value: boolean
-	onChange(event: any): void
+	value?: boolean
+	onChange?(event: any): void
 }
 const CheckBox: FC<CheckboxProps> = ({ value, onChange }) => (
 	<input
 		type="checkbox"
 		checked={value}
-		onChange={(event: FormEvent) => {
-			onChange({
-				target: {
-					value: event.target.checked
+		onChange={(event: FormEvent<HTMLInputElement>) => {
+			onChange?.({
+				currentTarget: {
+					value: event.currentTarget.checked
 				}
 			})
 		}}
@@ -41,28 +41,36 @@ const ExampleIndex: FC = () => {
 	return (
 		<>
 			<h1>Index</h1>
-			<form onSubmit={form.submit}>
+			<form onSubmit={form.onSubmit}>
 				<label>
 					<span>Nickname: </span>
-					<input {...form.subscribe('nickname', {})} />
+					<Field form={form} label="nickname">
+						<input />
+					</Field>
 				</label>
 				<br />
 				<label>
 					<span>Address: </span>
-					<input {...form.subscribe('address', {})} />
+					<Field form={form} label="address">
+						<input />
+					</Field>
 				</label>
 				<br />
 				<label>
 					<span>Is it myself: </span>
-					<CheckBox {...form.subscribe('is_it_myself', {})} />
+					<Field form={form} label="is_it_myself">
+						<CheckBox />
+					</Field>
 				</label>
 				<br />
 				<label>
 					<span>Gender: </span>
-					<select {...form.subscribe('gender', {})}>
-						<option value="female">female</option>
-						<option value="male">male</option>
-					</select>
+					<Field form={form} label="gender">
+						<select>
+							<option value="female">female</option>
+							<option value="male">male</option>
+						</select>
+					</Field>
 				</label>
 				<br />
 				<button type="submit">submit</button>
