@@ -10,12 +10,6 @@ const App: FC = () => {
 				<Link to="/">
 					<div className="nav-item">Index</div>
 				</Link>
-				<Link to="/button">
-					<div className="nav-item">Button</div>
-				</Link>
-				<Link to="/select">
-					<div className="nav-item">Select</div>
-				</Link>
 			</div>
 			<div className="content">
 				<Routes>

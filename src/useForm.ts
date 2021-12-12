@@ -14,10 +14,11 @@ interface Options {
 	onStateChange?(source: Field): void
 }
 export interface Form {
-	getState: () => State
+	submit(): void
+	getState(): State
 	onSubmit: FormEventHandler<Element>
-	subscribe: (label: Field['label'], options: Field['options']) => any
-	unsubscribe: (label: string) => void
+	subscribe(label: Field['label'], options: Field['options']): any
+	unsubscribe(label: string): void
 }
 
 export function useForm(options: Options): Form {
@@ -31,10 +32,14 @@ export function useForm(options: Options): Form {
 
 	const getState = () => state.current
 
+	const submit = () => {
+		opts.current.onFulfilled(state.current)
+	}
+
 	const onSubmit: FormEventHandler = event => {
 		event.preventDefault()
 		event.stopPropagation()
-		opts.current.onFulfilled(state.current)
+		submit()
 	}
 
 	const subscribe = (label: Field['label'], options: Field['options']): any => {
@@ -54,6 +59,7 @@ export function useForm(options: Options): Form {
 	}
 
 	return {
+		submit,
 		getState,
 		onSubmit,
 		subscribe,
