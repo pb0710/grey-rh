@@ -1,7 +1,7 @@
-import React, { useState, cloneElement, FC, isValidElement } from 'react'
+import React, { useState, cloneElement, FC, isValidElement, HTMLAttributes } from 'react'
 import { Form } from './useForm'
 
-interface FieldProps {
+interface FieldProps extends HTMLAttributes<HTMLElement> {
 	label: string
 	options?: Record<string, any>
 	form: Form
