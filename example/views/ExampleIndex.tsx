@@ -1,6 +1,7 @@
 import React, { FC, FormEvent } from 'react'
-import { Field, useForm } from '../../src'
+import { useForm } from '../../src/useForm'
 import '../classes/index.scss'
+import { Field } from './Field'
 
 interface CheckboxProps {
 	value?: boolean

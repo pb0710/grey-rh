@@ -1,12 +1,16 @@
 {
 	"version": "0.0.1",
-	"name": "grey-r-form",
+	"name": "grey-rh",
 	"main": "src/index.ts",
 	"types": "types/src/index.d.ts",
+	"repository": {
+		"url": "https://github.com/pb0710/grey-rh"
+	},
 	"scripts": {
 		"prepare": "husky install",
 		"dev": "vite --host",
-		"build": "tsc && vite build",
+		"build": "yarn run types && vite build",
+		"types": "rm -rf types && tsc",
 		"serve": "vite preview",
 		"test": "jest"
 	},
