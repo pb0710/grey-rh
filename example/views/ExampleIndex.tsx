@@ -12,11 +12,7 @@ const CheckBox: FC<CheckboxProps> = ({ value, onChange }) => (
 		type="checkbox"
 		checked={value}
 		onChange={(event: FormEvent<HTMLInputElement>) => {
-			onChange?.({
-				currentTarget: {
-					value: event.currentTarget.checked
-				}
-			})
+			onChange?.(event.currentTarget.checked)
 		}}
 	/>
 )

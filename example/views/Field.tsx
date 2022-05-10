@@ -1,4 +1,5 @@
-import React, { useState, cloneElement, FC, isValidElement, HTMLAttributes } from 'react'
+import React, { cloneElement, FC, isValidElement, HTMLAttributes } from 'react'
+import { useUpdate } from '../../src'
 import { Form } from '../../src/useForm'
 
 interface FieldProps extends HTMLAttributes<HTMLElement> {
@@ -11,10 +12,7 @@ export const Field: FC<FieldProps> = props => {
 	const { children, label, options = {}, form } = props
 
 	const controller = form.subscribe(label, options)
-	const [, setBol] = useState(true)
-	const update = () => {
-		setBol(pre => !pre)
-	}
+	const update = useUpdate()
 	const onFieldChange = (...args: any[]) => {
 		controller?.onChange(...args)
 		update()
