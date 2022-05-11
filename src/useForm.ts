@@ -25,7 +25,8 @@ export interface Form {
 export function useForm(options: Options): Form {
 	const opts = useLatestRef(options)
 
-	const state = useRef<State>(opts.current.initialState)
+	const initialState = opts.current.initialState
+	const state = useRef<State>(initialState)
 	const fields = useRef<Field[]>([])
 
 	const getState = () => state.current
@@ -44,6 +45,7 @@ export function useForm(options: Options): Form {
 		const field: Field = { label, options }
 		fields.current.push(field)
 		return {
+			defaultValue: initialState[label],
 			value: state.current[label],
 			onChange(arg: any) {
 				let val = arg
