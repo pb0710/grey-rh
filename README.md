@@ -29,8 +29,7 @@
 ├── .prettierrc // 格式化代码配置
 ├── stats.html // 包体积分析可视化页面
 ├── tsconfig.json // typescript 配置
-├── vite.config.ts // vite 配置
-└── yarn.lock // 依赖版本锁定
+└── vite.config.ts // vite 配置
 ```
 
 ## 工具链
