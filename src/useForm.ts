@@ -1,4 +1,4 @@
-import { FormEventHandler, useRef } from 'react'
+import { FormEventHandler, useCallback, useRef } from 'react'
 import { useLatestRef } from './useLatestRef'
 
 export interface State {
@@ -11,14 +11,19 @@ export interface Field {
 export interface Options {
 	initialState: State
 	onFulfilled(state: State): void
-	onFailed(): void
+	onFailed?(): void
 	onStateChange?(source: Field): void
+}
+export interface FieldController {
+	defaultValue: any
+	value: any
+	onChange(arg: any): void
 }
 export interface Form {
 	submit(): void
 	getState(): State
 	onSubmit: FormEventHandler<Element>
-	subscribe(label: Field['label'], options?: Field['options']): any
+	subscribe(label: Field['label'], options?: Field['options']): FieldController
 	unsubscribe(label: string): void
 }
 
@@ -29,37 +34,43 @@ export function useForm(options: Options): Form {
 	const state = useRef<State>(initialState)
 	const fields = useRef<Field[]>([])
 
-	const getState = () => state.current
+	const getState = useCallback(() => state.current, [])
 
-	const submit = () => {
+	const submit = useCallback(() => {
 		opts.current.onFulfilled(state.current)
-	}
+	}, [opts])
 
-	const onSubmit: FormEventHandler = event => {
-		event.preventDefault()
-		event.stopPropagation()
-		submit()
-	}
+	const onSubmit: FormEventHandler = useCallback(
+		event => {
+			event.preventDefault()
+			event.stopPropagation()
+			submit()
+		},
+		[submit]
+	)
 
-	const subscribe = (label: Field['label'], options: Field['options'] = {}) => {
-		const field: Field = { label, options }
-		fields.current.push(field)
-		return {
-			defaultValue: initialState[label],
-			value: state.current[label],
-			onChange(arg: any) {
-				let val = arg
-				if (arg?.nativeEvent instanceof Event) {
-					val = (<HTMLSelectElement | HTMLInputElement>arg.target).value
+	const subscribe = useCallback(
+		(label: Field['label'], options: Field['options'] = {}) => {
+			const field: Field = { label, options }
+			fields.current.push(field)
+			return {
+				defaultValue: initialState[label],
+				value: state.current[label],
+				onChange(arg: any) {
+					let val = arg
+					if (arg?.nativeEvent instanceof Event) {
+						val = (<HTMLSelectElement | HTMLInputElement>arg.target).value
+					}
+					state.current[label] = val
+					opts.current.onStateChange?.(field)
 				}
-				state.current[label] = val
-				opts.current.onStateChange?.(field)
 			}
-		}
-	}
-	const unsubscribe = (label: string) => {
+		},
+		[initialState, opts]
+	)
+	const unsubscribe = useCallback((label: string) => {
 		fields.current = fields.current.filter(field => field.label !== label)
-	}
+	}, [])
 
 	return {
 		submit,

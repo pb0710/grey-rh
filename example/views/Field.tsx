@@ -13,8 +13,8 @@ export const Field: FC<FieldProps> = props => {
 
 	const controller = form.subscribe(label, options)
 	const update = useUpdate()
-	const onFieldChange = (...args: any[]) => {
-		controller?.onChange(...args)
+	const onFieldChange = (arg: any) => {
+		controller?.onChange(arg)
 		update()
 	}
 	return (
